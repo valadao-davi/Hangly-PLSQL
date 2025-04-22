@@ -45,7 +45,7 @@ VALUES
 (1, 2, 2, 'Alguém sabe quem vai tocar?', '2025-04-21 10:00:00');
 
 -- Inserir Denúncias
-INSERT INTO Denuncia (ID_Empresa, ID_Usuario, ID_Evento, Motivo)
+INSERT INTO Denuncia (ID_Evento, ID_Usuario, ID_Evento, Motivo)
 VALUES 
 (101, 3, 1, 'Comportamento inadequado no grupo.'),
 (102, 1, 2, 'Conteúdo ofensivo em mensagem.');
