@@ -1,0 +1,79 @@
+CREATE TABLE Usuario (
+    ID_Usuario INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    Nome VARCHAR(200) NOT NULL,
+    Data_Nasc DATE NOT NULL,
+    Email VARCHAR(200) NOT NULL,
+    Senha VARCHAR(200) NOT NULL,
+    Bio VARCHAR(1500)
+);
+
+CREATE TABLE Endereco (
+    ID_Endereco INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    Logradouro VARCHAR(1000),
+    Numero INT,
+    Bairro VARCHAR(1000),
+    Cidade VARCHAR(200) NOT NULL,
+    Estado VARCHAR(200) NOT NULL,
+    CEP VARCHAR(200) NOT NULL
+);
+
+CREATE TABLE Evento (
+    ID_Evento INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    Nome VARCHAR(200) NOT NULL,
+    Descricao VARCHAR(1000) NOT NULL,
+    Data TIMESTAMP,
+    Categoria_Evento VARCHAR(500),
+    ID_Endereco INT NOT NULL,
+    ID_Usuario INT NOT NULL,
+    FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    FOREIGN KEY (ID_Endereco) REFERENCES Endereco(ID_Endereco) ON DELETE RESTRICT
+);
+
+CREATE TABLE Grupo (
+    ID_Grupo INT GENERATED ALWAYS AS IDENTITY,
+    Nome VARCHAR(200) NOT NULL,
+    Descricao VARCHAR(1000),
+    ID_Evento INT NOT NULL,
+    PRIMARY KEY (ID_Grupo, ID_Evento),
+    FOREIGN KEY (ID_Evento) REFERENCES Evento(ID_Evento) ON DELETE CASCADE
+);
+
+CREATE TABLE Usuario_Grupo (
+    ID_Grupo INT NOT NULL,
+    ID_Evento INT NOT NULL,
+    ID_Usuario INT NOT NULL,
+    PRIMARY KEY (ID_Grupo, ID_Usuario),
+    FOREIGN KEY (ID_Grupo, ID_Evento) REFERENCES Grupo(ID_Grupo, ID_Evento) ON DELETE CASCADE,
+    FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE
+);
+
+CREATE TABLE Interesse (
+    ID_Interesse INT GENERATED ALWAYS AS IDENTITY,
+    ID_Usuario INT NOT NULL,
+    ID_Evento INT NOT NULL,
+    PRIMARY KEY (ID_Interesse, ID_Usuario, ID_Evento),
+    FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    FOREIGN KEY (ID_Evento) REFERENCES Evento(ID_Evento) ON DELETE RESTRICT
+);
+
+CREATE TABLE Mensagem (
+    ID_Mensagem INT GENERATED ALWAYS AS IDENTITY,
+    ID_Usuario INT NOT NULL,
+    ID_Grupo INT NOT NULL,
+    ID_Evento INT NOT NULL,
+    Texto VARCHAR(200) NOT NULL,
+    Data_Horario TIMESTAMP NOT NULL,
+    PRIMARY KEY (ID_Mensagem, ID_Usuario, ID_Grupo),
+    FOREIGN KEY (ID_Grupo, ID_Usuario) REFERENCES Usuario_Grupo(ID_Grupo, ID_Usuario) ON DELETE CASCADE
+);
+
+CREATE TABLE Denuncia (
+    ID_Denuncia INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    ID_Empresa INT,
+    ID_Usuario INT,
+    ID_Evento INT,
+    Motivo VARCHAR(1000) NOT NULL,
+    FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario) ON DELETE SET NULL,
+    FOREIGN KEY (ID_Evento) REFERENCES Evento(ID_Evento) ON DELETE SET NULL
+);
+
